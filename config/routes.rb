@@ -15,6 +15,7 @@ Rails.application.routes.draw do
 
     root to: 'courses#index'
   end
+  post "/add_people_and_course" => "people#createAndAdd"
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

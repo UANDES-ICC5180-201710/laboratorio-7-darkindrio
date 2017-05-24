@@ -10,6 +10,7 @@ class PeopleController < ApplicationController
   # GET /people/1
   # GET /people/1.json
   def show
+
   end
 
   # GET /people/new
@@ -21,11 +22,29 @@ class PeopleController < ApplicationController
   def edit
   end
 
+  def createAndAdd
+    @person = Person.new(person_params)
+    course = Course.find(params[:course_id])
+    respond_to do |format|
+      if @person.save
+        @enrollment = Enrollment.new()
+        @enrollment.course = course
+        @enrollment.student = @person
+        @enrollment.save 
+        jsonObject = {"text" => markwond_text}
+        format.json { render json: {"state" => "success"}}
+      else
+        format.html
+        format.json { render json: {"state" => "fail", "errors" => @person.errors}}
+      end
+    end
+
+  end
+
   # POST /people
   # POST /people.json
   def create
     @person = Person.new(person_params)
-
     respond_to do |format|
       if @person.save
         format.html { redirect_to @person, notice: 'Person was successfully created.' }
@@ -69,6 +88,6 @@ class PeopleController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def person_params
-      params.require(:person).permit(:first_name, :last_name, :email, :email_confirmation)
+      params.require(:person).permit(:first_name, :last_name, :email, :email_confirmation, :password, :password_confirmation)
     end
 end

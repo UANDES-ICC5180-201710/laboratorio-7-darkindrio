@@ -1,9 +1,82 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Students</h1>
-
 <%= render 'people/list', people: @course.students %>
-
 <br>
+<input type="hidden" id = "course_id" value = "<%= @course.id %>">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Crear nuevo alumno</h4>
+      </div>
+      <div class="modal-body">
+        <%= render 'people/form', person: @person, resource_name: 'people/sign_in'%>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" onclick="myFunction()">Create and add</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-<%= link_to 'New Student', new_course_enrollment_path(course_id: @course.id) %>
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+  Create and add new studdent
+</button>
+<%= link_to 'Add new studdent', new_course_enrollment_path(course_id: @course.id), class: "btn btn-primary" %>
+
+<script>
+if (document.contains(document.getElementById("submit_button"))) {
+            document.getElementById("submit_button").remove();
+  }
+
+function myFunction() {
+
+    var oForm = document.forms["new_person"];
+
+    var first_name = oForm.elements["person[first_name]"].value;
+    var last_name = oForm.elements["person[last_name]"].value;
+    var email = oForm.elements["person[email]"].value;
+    var password = oForm.elements["person[password]"].value;
+    var email_confirmation = oForm.elements["person[email_confirmation]"].value;
+    var password_confirmation = oForm.elements["person[password_confirmation]"].value;
+
+    var input_course_id = document.getElementById("course_id");
+    var course_id = input_course_id.value
+
+
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "/add_people_and_course",
+        data: {
+          person:{
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+            email_confirmation: email_confirmation,
+            password: password,
+            password_confirmation: password_confirmation
+          },
+          course_id: course_id
+        },
+        success: function(json) {
+          var state = json.state;
+          if(state == "success"){
+            document.location.reload();
+          }
+          else{
+            alert("Error en algun parametro del formulario")
+          }
+          
+        },
+        error: function(json) {
+            alert('error');
+        }
+    });
+
+}
+</script>
+

@@ -1,5 +1,5 @@
 <% form_params = [person] if local_assigns[:form_params].nil? %>
-<%= form_for(*form_params) do |f| %>
+<%= form_for(*form_params, html: { id: "new_person"}) do |f| %>
 
   <div class="field form-group">
     <%= f.label :first_name %>
@@ -35,6 +35,6 @@
   </div>
 
   <div class="form-group actions">
-    <%= f.submit local_assigns[:submit_btn_text], class: "btn btn-success" %>
+    <%= f.submit local_assigns[:submit_btn_text], class: "btn btn-success", id: "submit_button" %>
   </div>
 <% end %>

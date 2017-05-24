@@ -19,10 +19,15 @@ class CoursesController < ApplicationController
   # GET /courses/new
   def new
     @course = Course.new
+    @person = Person.new
   end
 
   # GET /courses/1/edit
   def edit
+  end
+
+  def testControler
+    puts "hola mundo"
   end
 
   # POST /courses
@@ -66,6 +71,7 @@ class CoursesController < ApplicationController
   end
 
   def students
+    @person = Person.new
   end
 
   private
